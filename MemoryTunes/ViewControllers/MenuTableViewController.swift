@@ -1,35 +1,74 @@
 /**
  * Copyright (c) 2017 Razeware LLC
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * Notwithstanding the foregoing, you may not use, copy, modify, merge, publish,
- * distribute, sublicense, create a derivative work, and/or sell copies of the
- * Software in any work that is designed, intended, or marketed for pedagogical or
- * instructional purposes related to programming, coding, application development,
- * or information technology.  Permission for such use, copying, modification,
- * merger, publication, distribution, sublicensing, creation of derivative works,
- * or sale is expressly withheld.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
  */
 
 import UIKit
+import ReSwift
+
 
 final class MenuTableViewController: UITableViewController {
-
+  
+  // 1  TableDataSource is included in the starter and acts as a declarative data source for UITableView.
+  var tableDataSource: TableDataSource<UITableViewCell, String>?
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    // 2 Subscribe to the menuState on viewWillAppear. Now you’ll get callbacks in newState every time menuState changes.
+    store.subscribe(self) { subscriptor in
+      subscriptor.select { state in
+        state.menustate
+      }
+    }
+  }
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+    // 3 Unsubscribe, when needed.
+    store.unsubscribe(self)
+  }
 }
+
+// MARK: - StoreSubscriber
+extension MenuTableViewController: StoreSubscriber {
+  
+  func newState(state: MenuState) {
+    // 4 This is the declarative part. It’s where you populate the UITableView. You can clearly see in code how state is transformed into view.
+    tableDataSource = TableDataSource(cellIdentifier:"TitleCell", models: state.menuTitles) { cell, model in
+      cell.textLabel?.text = model
+      cell.textLabel?.textAlignment = .center
+      return cell
+    }
+    
+    tableView.dataSource = tableDataSource
+    tableView.reloadData()
+  }
+}
+
+/*
+ Note: As you might have noticed, ReSwift favors immutability – heavily using structures (values) not objects. It also encourages you to create declarative UI code. Why?
+ The newState callback defined in StoreSubscriber passes state changes. You might be tempted to capture the value of the state in a property, like this:
+ 
+ final class MenuTableViewController: UITableViewController {
+ var currentMenuTitlesState: [String]
+ ...
+ But writing declarative UI code that clearly shows how state is transformed into view is cleaner and much easier to follow. The problem in this example is that UITableView doesn’t have a declarative API. That’s why I created TableDataSource to bridge the gap. If you’re interested in the details, take a look at TableDataSource.swift.
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

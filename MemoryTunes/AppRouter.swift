@@ -4,6 +4,8 @@
 
 import ReSwift
 
+//MAIN CLASS FOR NAVIGATION
+
 //This enum represents all of the view controllers in your app.
 //Finally! You have something to store in the app’s State. There’s only one main state structure (AppState in this case), but you can divide the state of the app into sub-states referenced in the main state.
 
@@ -24,7 +26,7 @@ final class AppRouter {
     window.rootViewController = navigationController
     // 1 AppState now subscribes to the global store. In the closure, select indicates you are specifically subscribing to changes in the routingState.
     store.subscribe(self) {
-      $0.select {
+        $0.select {
         $0.routingState
       }
     }
@@ -45,6 +47,7 @@ final class AppRouter {
 // MARK: - StoreSubscriber
 // 3 Make the AppRouter conform to StoreSubscriber to get newState callbacks whenever routingState changes.
 extension AppRouter: StoreSubscriber {
+  
   func newState(state: RoutingState) {
     // 4 You don’t want to animate the root view controller, so check if the current destination to push is the root.
     let shouldAnimate = navigationController.topViewController != nil

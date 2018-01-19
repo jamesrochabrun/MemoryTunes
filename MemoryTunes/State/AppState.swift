@@ -37,6 +37,8 @@ struct AppState: StateType {
   
   // first sub-state, handling navigation
   let routingState: RoutingState
+  // second subState, handling menu options
+  let menustate: MenuState
   
 }
 
