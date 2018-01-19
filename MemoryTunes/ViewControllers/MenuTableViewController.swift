@@ -54,6 +54,21 @@ extension MenuTableViewController: StoreSubscriber {
  But writing declarative UI code that clearly shows how state is transformed into view is cleaner and much easier to follow. The problem in this example is that UITableView doesn’t have a declarative API. That’s why I created TableDataSource to bridge the gap. If you’re interested in the details, take a look at TableDataSource.swift.
  */
 
+// MARK: - Actions
+extension MenuTableViewController {
+  
+  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    var routeDestination: RoutingDestination = .categories
+    switch indexPath.row {
+    case 0: routeDestination = .game
+    case 1: routeDestination = .categories
+    default:
+      break
+    }
+    // This sets routeDestination based on the row selected. It then uses dispatch to pass the RoutingAction to the Store.
+    store.dispatch(RoutingAction(destination: routeDestination))
+  }
+}
 
 
 
