@@ -19,6 +19,11 @@ final class MenuTableViewController: UITableViewController {
         state.menustate
       }
     }
+    self.updateNavigationState()
+  }
+  
+  private func updateNavigationState() {
+    store.dispatch(RoutingAction(destination: .menu))
   }
   
   override func viewWillDisappear(_ animated: Bool) {

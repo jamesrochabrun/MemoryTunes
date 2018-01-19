@@ -32,9 +32,18 @@ final class AppRouter {
     }
   }
   
-  // 2
+  // 2  you’ll recall that pushViewController is called each time a new navigationState is received. This means that you respond to the menu RoutingDestination update by…pushing the menu on again!
   fileprivate func pushViewController(identifier: String, animated: Bool) {
+    
+    ///You have to dynamically check if the MenuViewController isn’t already visible before pushing:
     let viewController = instantiateViewController(identifier: identifier)
+    let newViewControllerType = type(of: viewController)
+    if let currentVc = navigationController.topViewController {
+      let currentViewControllerType = type(of: currentVc)
+      if currentViewControllerType == newViewControllerType {
+        return
+      }
+    }
     navigationController.pushViewController(viewController, animated: animated)
   }
   
