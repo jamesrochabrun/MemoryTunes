@@ -28,9 +28,43 @@
  * THE SOFTWARE.
  */
 
+import ReSwift
 
-struct MemoryCard {
-  let imageUrl: String
-  var isFlipped: Bool
-  var isAlreadyGuessed: Bool
+//MARK: - 1 - Create the AppState
+
+/// You’ll begin by setting up the core of the application: its state.
+struct AppState: StateType {
+  
+  // first sub-state, handling navigation
+  let routingState: RoutingState
+  // second subState, handling menu options
+  let menustate: MenuState
+  // third sub-state, handling categories
+  let categoriesState: CategoriesState
+  // four substate, handling game
+  let gameState: GameState
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

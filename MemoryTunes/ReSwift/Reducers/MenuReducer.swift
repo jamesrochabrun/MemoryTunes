@@ -6,5 +6,5 @@ import ReSwift
 
 func menuReducer(action: Action, state: MenuState?) -> MenuState {
   let state = state ?? MenuState()
-  return MenuState()
+  return state
 }

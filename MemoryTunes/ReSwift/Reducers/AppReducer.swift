@@ -14,8 +14,10 @@ func appReducer(action: Action, state: AppState?) -> AppState {
   
   let routingState = routingReducer(action: action, state: state?.routingState)
   let menuState = menuReducer(action: action, state: state?.menustate)
+  let categoriesState = categoriesReducer(action: action, state: state?.categoriesState)
+  let gameState = gameReducer(action: action, state: state?.gameState)
   
-  return AppState(routingState: routingState, menustate: menuState)
+  return AppState(routingState: routingState, menustate: menuState, categoriesState: categoriesState, gameState: gameState)
 }
 
 

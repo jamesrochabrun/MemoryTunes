@@ -7,7 +7,6 @@ import ReSwift
 ///Because it’s good practice, you’ll group state variables into sub-state structures
 
 struct RoutingState: StateType {
-  
   var navigationState: RoutingDestination
   
   init(navState: RoutingDestination = .menu) {
