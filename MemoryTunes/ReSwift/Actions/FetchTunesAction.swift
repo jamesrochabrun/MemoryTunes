@@ -4,6 +4,9 @@
 
 // MARK: - Asynchronous action!
 
+//Conceptually asynchronous operations can simply be treated as state updates that occur at a later point in time. Here’s a simple example of how to tie an asynchronous network request to ReSwift state update:
+
+
 import ReSwift
 
 /// Helper function
@@ -14,11 +17,11 @@ import ReSwift
 func fetchTunes(state: AppState, store: Store<AppState>) -> FetchTunesAction {
   
   iTunesAPI.searchFor(category: state.categoriesState.currentCategorySelected.rawValue) { imageUrls in
-    store.dispatch(SetCardsAction(cardImageUrls: imageUrls))
+    DispatchQueue.main.async {
+      store.dispatch(SetCardsAction(cardImageUrls: imageUrls))
+    }
   }
   return FetchTunesAction()
 }
 
-struct FetchTunesAction: Action {
-  
-}
+struct FetchTunesAction: Action {}
